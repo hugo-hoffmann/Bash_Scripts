@@ -1,0 +1,242 @@
+################
+USUÁRIO E KERNEL
+################
+
+whoami  								informa o usuario
+uname -a  			        				informações do kernel
+uname -r  								informações da distro
+lsmod 				        				lista os modulos do kernel
+modinfo <nome_do_modulo>   						mais informações sobre o modulo específico
+modprobe -a <nome_do_modulo>  						adiciona um modulo
+modprobe -r <nome_do_modulo> 						remove o modulo
+su <mome_do_usuario>  							muda para o usuario
+su  									entra como raiz
+passwd nome_do_usuario  						muda a senha do usuario
+
+
+######################
+DIRETÓRIOS E ARQUIVOS
+######################
+
+clear 									limpa o teminal
+ls - 									lista  o que tem dentro do diretorio 
+ls -l - 								lista os arquivos com mais informações
+ls -dl - 								informações longas sobre os diretórios
+ls -la 									lista arquivos ocultos
+locate <expressão> 							localiza os arquivos que contem o nome pesquisado 
+whereis <nome_do_binario> 						localiza binarios
+which <nome_do_binario> 						procura o nome na variavel PATH
+find <diretorio> <option> <expression>   				procura no diretoro (/  para buscar em todos), podendo filtrar portype, nome, etc
+Ex: find / -type f -name apache2
+find . -iname <termo_buscado> 						procura no diretorio atual (.) o arquivo com case-sensitive
+cd <nome_do_diretorio> 							abre um diretorio
+cd .. 	 								volta pro diretorio anterior 
+cd ~  									vai para o diretorio home
+mkdir <nome_do_diretório>						cria um diretorio
+mkdir -p <Nome_pai/nome_filho> 						Cria hierarquia de diretorios (um dentro do outro)
+rmdir <nome_do_diretorio> 						remove um diretorio vazio
+rm <nome_do_diretorio> 							remove um diretorio vazio
+rm -r <nome_do_arquivo>  						remove qualquer coisa
+rm -i <nome_do_arquivo>							remove interativo. Pergunta se realmente quer apagar o arquivo.
+rm -rf <nome_do_arquivo>						força a remoção do arquivo (very dangerous)
+mv <nome_do_arquivo> <path_destino> 					move o arquivo para o path_de_destino
+mv <nome_do_arquivo> <path_destino> <novo_nome> 			move o arquivo para o path_de_destino e da um nome novo
+touch <nome_do_arquivo> 						cria um arquivo
+pwd  									diz em qual diretorio voce esta
+man <nome_do_comando> 							manual do comando
+
+
+#############################
+EXIBIÇÃO E EDIÇÃO DE ARQUIVOS
+#############################
+
+file nome_do_arquivo - 							retorna o tipo do arquivo
+cat arquivo_ou_path  - 							mostra o conteudo do arquivo
+cat -n mome_do_arquivo -						numera as linhas
+cat arquivo_ou_path | grep filtro  - 					mostra o conteudo do arquivo fazendo filtragem 
+grep -i  -								faz filtragem case-insensitive
+grep -E  -								permite filtragem com REGEX
+cut -c  numero_do_campo_cortado nome_do_arquivo  - 			faz um corte no arquivo
+cut -d   -								delimitador (d é a virgula em um arquivo csv)
+cut -f   - 								separa por campos do delimitador 
+cut -d ' ' -f '1,2' --output-delimiter='####' nome_do_arquivo  -	muda o delimitador de 'espaço' para ####
+head -n_de_linhas path_do_arquivo  - 					mostra as primeiras n linhas do arquivo 
+tail -n_de_linhas path_do_arquivo  - 					mostra as ultimas n linhas do arquivo 
+nl path_do_arquivo - numera as linhas do arquivo
+sed s/mysql/MySQL/g /etc/snort/snort.conf > snort2.conf   		o parametro s aplica a substituição, enquanto o parametro g indica que a substição é global. caso queira substituir apenas a                                                                       primeira ocorrencia, remova o g. caso queira substituir um parametro específico, faça primeiro grep, identifique o                                                                       numero ocorrencia e informe no lugar do parametro g.
+
+sed -e 									imprime na tela
+sed -e '/padrao/d' nome_do_arquivo   - 					apaga o padrão informado
+more path_do_arquivo - 							mostra a primeira pagina do arquivo. Ao apertar Enter, passa a página.
+less path_do_arquivo  - 						permite fazer o scroll do arquivo. Podemos usar / para fazer alguma filtragem.
+cp nome_do_arquivo novo_nome_arquivo - 					faz uma copia e muda o nome
+cp -r nome_do_arquivo  novo_nome  - 					faz copia de diretorios
+cp nome_do_arquivo path_do_diretorio_desejado - 			copia o arquivo em outro diretorio
+cp -r * ~/path  - 							faz copia de multiplos arquivos de um diretorio grande
+
+
+
+######################
+COMPRESSÃO DE ARQUIVOS
+######################
+
+tar -cvf arquivo_combinado.tar arq1.sh arq2.sh    			comprime arquivos em um arquivo único. c(reate),v(erbose),f(write to)
+tar -tf arquivo.tar   							mostra os arquivos contidos no .tar, sem descompactar
+tar -xf arquivo.tar   							extrai os arquivos do .tar
+gzip nome_do_arquivo_tar.*    						compacta o arquivo com o gzip
+gunzip arquivo_compactado.*   						descompacta o arquivo gzip
+gzip nome_do_arquivo_tar.*    						compacta o arquivo com o gzip
+gunzip arquivo_compactado.*   						descompacta o arquivo gzip
+bzip2 arquivo_compactado.*    						compacta o arquivo com o bzip2
+bunzip2 arquivo_compactado.*  						descompacta o arquivo bzip2
+compress arquivo_compactado.* 	 					compacta o arquivo com compress
+uncompress arquivo_compactado.* 					descompacta o arquivo compress
+dd if=inputfile of=outputfile   					copia arquivos, inclusive arquivos deletados
+
+
+
+##########
+PERMISSÕES
+##########
+
+chmod (soma_valor_dec)(soma_valor_dec)(soma_valor_dec) nome_do_arquivo 		 	muda permissões de usuario. Valores decimais 4 -r/2-w/x-1/ - - 0)
+chmod -R (soma_valor_dec)(soma_valor_dec)(soma_valor_dec) nome_do_arquivo 		muda as permissões de um diretorio e de todos os arquivos contidos.
+chown novo_dono path_do_arquivo   							passa a propriedade do arquivo para o novo_dono
+chgrp novo_grupo_proprietario  nome_do_arquivo  					muda o grupo proprietario do arquivo
+
+
+
+
+HD E PARTIÇÕES
+
+fdisk -l  									informações sobre as partições de discos
+lsblk 	 									lista informações basicas sobre cada block device listados em /dev.
+mount /dev/partição /mnt  - 							monta o dispositivo externo na partição sdb1. A partição em que o dispositivo é montado deve estar vazia (caso já                                                                              já exista sbd1, usar sbc1, etc).
+
+umount /dev/partição  	 							desmonta a partição externa
+df  										mostra informações básicas sobre o HD e dispositivos montados
+df partição   									mostra informações sobre um drive/partição especifica.
+
+
+###########################
+EDIÇÃO DE TEXTO NO TERMINAL
+###########################
+
+nano nome_do_arquivo  								abre o arquivo no editor de texto
+vim nome_do_arquivo   								abre o arquivo no editor de texto
+
+
+
+#########
+PROCESSOS
+#########
+
+ps      									lista os processos que estão ocorrendo no ususario
+ps aux  									lista os processos que estao ocorrendo na maquina
+ps aux | grep processo  				 			faz busca de processo com filtragem
+top  - 										informa os processos que estão usando mais recursos dinamicamente
+nice -n -10 path-do-arquivo  -							aumenta a prioridade do arquivo em -10
+nice -n 10 path-do-arquivo   							reduz a prioridade do arquivo em 10
+renice n num-PID   								define a prioridade com o valor absoluto n
+kill -parametro PID  								termina um processo de PID segundo o parametro
+killall -parametro nome-do processo  - 						termina o processo segundo o parametro
+comando-que-inicia-o-processo &  - 						faz o processo rodar no background
+fg PID - 									trás o processo de numero PID para o foreground
+at time  - 									irá executar algum comando no tempo indicado (pode ser um horario, data, ou intervalo de tempo). Irá abrir um                                                                              menu interativo para se especificar o código a ser executado.
+
+
+
+##########
+VARIÁVEIS
+##########
+
+env  						 				mostra as variáveis de ambiente
+set   										mostra todas as variaveis de ambiente/shell
+set | more  									mostra as variaveis linha por linha
+nome_da_variável = novo_valor 							muda o valor da variável Exemplo:HISTSIZE = 0	
+export nome_da_variavel 							salva as modificações das variáveis
+PATH=$PATH:novo_path 								adiciona um novo local à variável PATH
+NEW_VARIABLE="conteudo"  	 						cria variável
+unset NEW_VARIABLE       							apaga a variável
+
+
+
+########
+SERVIÇOS
+########
+
+service servicename start|stop|restart   					inicia|para|reinicia um serviço
+Ex: service apache2 start|stop|restart   					inicia|para|reinicia o apache
+
+
+
+####
+SHA
+####
+
+sha256sum nome_do_arquivo    							diz o valor do SHA 256 do arquivo
+
+
+
+#####
+REDES
+#####
+
+ifconfig  									informações gerais de rede
+ifconfig eth0 numero_de_ip   							muda o IP. Caso bem sucedido, o terminal não responde nada.
+ifconfig eth0 numero_de_ip netmask novo_netmask broadcast novo_broadcast  	muda o IP, netmask e broadcast. Caso bem sucedido, o terminal não responde nada.
+ifconfig eth0 down			|
+ifconfig eth0 hw ether mac_address_novo |  					Muda o MAC Address
+ifconfig eth0 up			|
+iwconfig  									informações sobre despositivos de wireless
+iwlist wlan0 scan 								busca redes wi-fi disponíveis
+nmcli dev wifi     								busca redes de wi-fi disponiveis
+nmcli dev wifi connect nome_da_rede password senha_da_rede  			conecta a rede de wifi
+dhclient eth0  									pede um novo IP para o DHCP
+dig endereço_do_dominio ns  							retorna informações do nameserver do dominio
+dig endereço_do_dominio mx  							retorna informações do server de email
+
+
+
+##########
+BLUETOOTH
+##########
+
+hciconfig  									informações gerais sobre o dispositivo bluetooth
+hciconfig nome_do_dispositivo up   						verifica se a conexão está habilitada
+hcitool 									informações especificas sobre o dispositivo bluetooth
+hcitool scan  	 								busca dispositivos bluetooth disponíveis
+hcitool inq   									mais informações sobre os dispositivos scanneados
+hcidump 									permite rastrear a comunicação bluetooth
+
+
+
+###########################
+INSTALAR E REMOVER PACOTES
+###########################
+
+sudo apt NOME 									instala um progrma
+sudo apt(-get) update  								atualiza a lista de  de repositorios
+apt list --upgradable 								diz quais aplicativos podem saer utilizados
+apt-get   									igual ao apt, mas com mais funcionalidades.
+sudo apt remove NOME 	 							remove um aplicativo  (esse comando não apaga o arquivo de configuração)
+apt autoremove NOME  								apaga as dependencias que não estão sendo mais utilizadas.
+apt-get purge nome_do_programa  						remove tudo, inclusive arquivos de configuração
+apt search nome_do_pacote   							verifica se o pacote esta no repositório
+apt-cache search pacote_buscado   						Busca o pacote nos repositórios
+dpkg - l 									mostra todos os pacotes instalados
+dpkg - | grap nome_do_pacote   							procura por um pacote especifico
+dnf 										(gerenciador de pacotes Fedora, CentOS, Black hat, etc) os parametros são os mesmo
+
+
+#######
+ATALHOS
+#######
+
+clear/Ctrl+l   									limpa o terminal
+exit/Ctrl + d  									fecha terminal
+ctrl+a   									vai para o inicio da linha
+ctrl+e 										vai para o fim da linha
+ctrl+r  									busca rapida
+ctrl+c  									interrompe a execução de um comando
+
